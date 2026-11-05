@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本活動｜大專歌唱比賽</title>
+<meta name="description" content="淡江大學共鳴箱古典吉他社主辦：校園音樂祭與全國大專歌唱比賽。免費報名、免費入場。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="hero">
+  <nav class="nav" aria-label="主選單">
+    <span class="brand" data-bind="name">本活動</span>
+    <ul>
+      <li><a href="#about">介紹</a></li>
+      <li><a href="#timeline">時程</a></li>
+      <li><a href="#rules">章程</a></li>
+      <li><a href="#register">報名</a></li>
+      <li><a href="#results">公告</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+  <div class="hero-inner">
+    <p class="eyebrow" data-bind="organizer">淡江大學共鳴箱古典吉他社</p>
+    <h1><span data-bind="name">本活動</span><small data-bind="subtitle"></small></h1>
+    <p class="lead">一天校園音樂祭，一天全國大專歌唱比賽。<br>報名免費，入場免費。</p>
+    <p class="dates" data-bind="dates"></p>
+    <p class="note" data-bind="dateNote"></p>
+    <a class="btn" href="#register">我要報名</a>
+  </div>
+</header>
+
+<main id="main">
+  <section id="about" class="wrap">
+    <h2>活動介紹</h2>
+    <div class="cards">
+      <article class="card">
+        <p class="tag">Day 1｜週四</p>
+        <h3>校園音樂祭＋市集</h3>
+        <p>淡江校內音樂性社團輪番上台，可以是完整樂團。旁邊有小市集，觀眾坐在草地上聽。</p>
+      </article>
+      <article class="card">
+        <p class="tag">Day 2｜週五</p>
+        <h3>大專歌唱比賽決賽</h3>
+        <p>全國大專校院學生都能報名。線上影音海選後，10～12 組進決賽，評出前三名，觀眾投票選人氣獎。</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="timeline" class="wrap">
+    <h2>比賽時程</h2>
+    <ol class="timeline" id="timeline-list"></ol>
+  </section>
+
+  <section id="rules" class="wrap">
+    <h2>比賽章程重點</h2>
+    <dl class="facts">
+      <div><dt>組別</dt><dd>只有一組：歌唱組</dd></div>
+      <div><dt>資格</dt><dd>全國大專校院在學學生（主唱）</dd></div>
+      <div><dt>海選</dt><dd>YouTube 不公開影片 1～2 分鐘，一鏡到底、不修音</dd></div>
+      <div><dt>決賽</dt><dd>一首歌、5 分鐘內；10～12 組</dd></div>
+      <div><dt>台上人數</dt><dd>主唱 1 人＋伴奏最多 2 人</dd></div>
+      <div><dt>伴奏</dt><dd>自彈自唱、樂手伴奏，或伴奏音檔（不可含主唱人聲）</dd></div>
+      <div><dt>樂器</dt><dd>可直接接線的樂器（木吉他、電子琴等）、木箱鼓；不收鼓組；主辦不提供音箱</dd></div>
+      <div><dt>主辦提供</dt><dd>麥克風、樂器接線、音檔播放</dd></div>
+      <div><dt>評分</dt><dd>詮釋 40%、音色 20%、台風 20%、整體和諧度 20%；3 位評審</dd></div>
+      <div><dt>獎項</dt><dd>冠軍、亞軍、季軍、人氣獎（觀眾掃碼投票）</dd></div>
+    </dl>
+    <p id="rules-link" class="muted">完整章程整理中，公告後放在這裡。</p>
+  </section>
+
+  <section id="register" class="wrap">
+    <h2>報名</h2>
+    <p>報名期間：<strong data-bind="registrationPeriod"></strong></p>
+    <div id="form-area" class="form-area"></div>
+  </section>
+
+  <section id="results" class="wrap">
+    <h2>晉級與得獎公告</h2>
+    <h3>決賽晉級名單</h3>
+    <div id="finalists"></div>
+    <h3>得獎名單</h3>
+    <div id="winners"></div>
+  </section>
+
+  <section id="faq" class="wrap">
+    <h2>常見問題</h2>
+    <details><summary>要收報名費嗎？觀眾要買票嗎？</summary><p>都不用。報名、入場、攤位全部免費。</p></details>
+    <details><summary>我不是淡江的學生，可以報名嗎？</summary><p>可以。只要主唱是全國大專校院的在學學生就能報名。</p></details>
+    <details><summary>伴奏的人也要是學生嗎？</summary><p>章程確認中，公告後會更新在這裡。</p></details>
+    <details><summary>海選影片怎麼交？</summary><p>上傳到 YouTube，隱私設定選「不公開」，把連結貼到報名表。影片 1～2 分鐘，一鏡到底，不要修音。</p></details>
+    <details><summary>可以帶鼓組或音箱嗎？</summary><p>不收鼓組，主辦也不提供音箱。可以用直接接線的樂器（木吉他、電子琴等）和木箱鼓。</p></details>
+    <details><summary>可以用伴奏音檔嗎？</summary><p>可以，但不能有主唱人聲。晉級後在 04/16 前上傳 MP3 或 WAV。</p></details>
+    <details><summary>比賽會直播嗎？我的影片會被放上網嗎？</summary><p>第一年不直播。主辦方會錄影存檔，但不會公開上傳完整的翻唱演出影片，只會用 30 秒以內的片段或照片做活動紀錄。</p></details>
+    <details><summary>下雨怎麼辦？</summary><p>決賽在室內舉行（地點待確認）。如果遇到颱風停課等狀況，會在活動前 24 小時在本網站公告並寄 Email。</p></details>
+    <details><summary>我的個人資料會怎麼使用？</summary><p>只用在比賽聯絡、審查、頒獎和核銷，最晚 2027/05/31 刪除。公告名單只會放姓名、學校、曲目。</p></details>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>主辦：<span data-bind="organizer"></span></p>
+  <p id="contact"></p>
+  <p class="muted">本網站為靜態網站；報名資料由 Google 表單保存。</p>
+</footer>
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

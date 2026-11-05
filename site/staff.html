@@ -1,0 +1,228 @@
+<!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>本活動工作人員導覽</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: 一條吉他指板當時間軸（品格＝月份），下面是「選你的組」→ 你的工作與截止日 */
+:root{
+  --bg:#f7f3ec; --paper:#fffdf8; --ink:#231c17; --muted:#6d625a; --line:#e3d9cc;
+  --wood:#3b2a20; --wood2:#5a3e2e; --fret:#c9b48a; --string:#d9d4cc; --accent:#b0471f;
+  --g-total:#7e64b8; --g-b2b:#d9822b; --g-race:#3f87c4; --g-b2c:#4f9a4a; --g-admin:#c9a227;
+  --display:"Noto Serif TC","Songti TC",serif; --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17120f; --paper:#211a16; --ink:#f1e9df; --muted:#b5a89c; --line:#3a2f28;
+  --wood:#2a1d15; --wood2:#3d2a1f; --fret:#a8915f; --string:#8d867c; --accent:#e9774a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17120f; --paper:#211a16; --ink:#f1e9df; --muted:#b5a89c; --line:#3a2f28;
+  --wood:#2a1d15; --wood2:#3d2a1f; --fret:#a8915f; --string:#8d867c; --accent:#e9774a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.25}
+h1{font-size:clamp(30px,6vw,52px);margin:0}
+h2{font-size:clamp(22px,4vw,30px);margin:48px 0 8px}
+h3{font-size:19px;margin:0 0 6px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)}
+.label{font-size:13px;letter-spacing:.08em;color:var(--accent);font-weight:700}
+header{padding-block:36px 8px}
+.lead{font-size:clamp(17px,2.4vw,20px);max-width:44em;margin-top:12px}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px}
+.four div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.four b{display:block;font-size:17px}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
+.day{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.day ol{margin:8px 0 0;padding-left:0;list-style:none}
+.day li{display:grid;grid-template-columns:96px 1fr;gap:8px;padding:4px 0;border-top:1px dashed var(--line);font-variant-numeric:tabular-nums}
+.day li:first-child{border-top:0}
+.day time{color:var(--accent);font-weight:700}
+/* 指板 */
+.neck-scroll{overflow-x:auto;margin-top:14px;border-radius:14px}
+.neck{position:relative;min-width:760px;height:230px;background:linear-gradient(180deg,var(--wood2),var(--wood));border-radius:14px}
+.fret{position:absolute;top:0;bottom:0;width:4px;background:var(--fret);opacity:.9}
+.fret span{position:absolute;bottom:6px;left:8px;color:#f3e6cf;font-size:13px;white-space:nowrap}
+.str{position:absolute;left:0;right:0;height:2px;background:var(--string);opacity:.55}
+.dot{position:absolute;width:18px;height:18px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid #fff;cursor:default}
+.dot:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.today{position:absolute;top:0;bottom:0;width:2px;background:#ffd36b}
+.today span{position:absolute;top:4px;left:6px;color:#ffd36b;font-size:12px;font-weight:700;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:10px;font-size:14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.tip{min-height:28px;margin-top:8px;font-size:15px}
+/* 組別選擇 */
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.picker button{font:inherit;font-size:15px;border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+.picker button[aria-pressed="true"]{border-color:var(--c);background:var(--c);color:#fff}
+.picker button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.group{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:20px;margin-top:16px;background:var(--paper);border:1px solid var(--line);border-left:8px solid var(--c);border-radius:14px;padding:20px}
+@media (max-width:720px){.group{grid-template-columns:1fr}}
+.group ul{margin:6px 0 0;padding-left:20px}
+.tasks{list-style:none;margin:0;padding:0}
+.tasks li{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tasks li:first-child{border-top:0}
+.tasks .d{font-weight:700;color:var(--c)}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.rules div{border-top:3px solid var(--accent);padding-top:10px}
+.docs{columns:2 280px;column-gap:24px;margin-top:10px;padding-left:20px}
+.docs li{break-inside:avoid;margin-bottom:6px}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.dot{transition:transform .15s}.dot:hover{transform:translate(-50%,-50%) scale(1.25)}}
+</style>
+</head><body>
+
+<div class="wrap">
+<header>
+  <p class="label">淡江大學共鳴箱古典吉他社｜新成員必讀</p>
+  <h1>本活動：兩天、四件事、一起完成</h1>
+  <p class="lead">我們要在 2027 年 4 月底辦一個兩天的音樂活動。這一頁告訴你三件事：<b>活動在做什麼</b>、<b>你那一組要做什麼</b>、<b>什麼時候要完成</b>。名稱還沒決定，先叫它「本活動」。</p>
+  <div class="four">
+    <div><span class="label">元素 1</span><b>校內社團展演</b>淡江的音樂社團輪流上台，可以是完整樂團。</div>
+    <div><span class="label">元素 2</span><b>歌唱比賽＋評審</b>3 位專業評審，選出前三名；觀眾投人氣獎。</div>
+    <div><span class="label">元素 3</span><b>跨校參賽</b>全國大專學生都能報名，先線上海選。</div>
+    <div><span class="label">元素 4</span><b>小市集</b>攤販免費擺攤，觀眾邊逛邊聽。</div>
+  </div>
+</header>
+
+<section>
+  <h2>活動當天長什麼樣子</h2>
+  <p class="muted">日期暫定 2027/4/29（四）、4/30（五）。正在確認是不是期中考週，可能改成 5/13–14。</p>
+  <div class="days">
+    <div class="day"><h3>週四｜音樂祭＋市集（戶外）</h3>
+      <ol>
+        <li><time>09:00</time><span>廠商搭舞台、帳篷</span></li>
+        <li><time>13:00</time><span>工作人員集合、簽到</span></li>
+        <li><time>13:30</time><span>各團音響測試</span></li>
+        <li><time>15:30</time><span>開場，5～6 團輪流演出；市集開張</span></li>
+        <li><time>17:00</time><span>志工 A 班、B 班交接</span></li>
+        <li><time>21:30</time><span>散場、撤場</span></li>
+      </ol></div>
+    <div class="day"><h3>週五｜歌唱比賽決賽（室內，建議方案）</h3>
+      <ol>
+        <li><time>12:00</time><span>工作人員集合、場地檢查</span></li>
+        <li><time>13:30</time><span>12 組選手彩排</span></li>
+        <li><time>17:30</time><span>觀眾入場、評審就位</span></li>
+        <li><time>18:30</time><span>決賽開始，每組一首歌</span></li>
+        <li><time>20:30</time><span>評審講評；兩個人各算一次分數</span></li>
+        <li><time>20:50</time><span>頒獎、合照</span></li>
+      </ol></div>
+  </div>
+</section>
+
+<section>
+  <h2>七個月的路線圖</h2>
+  <p class="muted">把它想成一把吉他的指板：每一格是一個月，每個圓點是一個「關卡」。關卡沒過，就不能往下一格走。把滑鼠移到圓點上（手機用點的）看說明。</p>
+  <div class="neck-scroll" tabindex="0" aria-label="2026 年 11 月到 2027 年 5 月的時間軸，可左右捲動">
+    <div class="neck" id="neck"></div>
+  </div>
+  <p class="tip" id="tip" aria-live="polite">選一個圓點看說明。</p>
+  <div class="legend" id="legend"></div>
+</section>
+
+<section>
+  <h2>選你的組，看你要做什麼</h2>
+  <div class="picker" id="picker" role="group" aria-label="選擇組別"></div>
+  <div id="group"></div>
+</section>
+
+<section>
+  <h2>三條規則，全部人都要記得</h2>
+  <div class="rules">
+    <div><h3>穩定比華麗重要</h3><p>我們第一次辦。遇到選擇，選比較省錢、省人力、不容易出錯的那個。</p></div>
+    <div><h3>卡住就標紅</h3><p>在活動總表把狀態改成「卡住」，整列會變紅。卡住不丟臉，藏起來才麻煩。</p></div>
+    <div><h3>不確定就寫「待確認」</h3><p>不要自己猜規定或價格。寫「待確認」，交給總召去問。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>所有文件在哪裡</h2>
+  <p class="muted">都在雲端「歌神杯」資料夾，檔名開頭是「本活動_」。</p>
+  <ul class="docs">
+    <li><a href="https://docs.google.com/spreadsheets/d/1SjKFqZZPYdVReN-dzqO-a4tQp4ng4pgvW5t7gniDx3g/edit" target="_blank" rel="noopener">活動總表（每週更新狀態）</a></li>
+    <li><a href="https://docs.google.com/document/d/1pOFKnr5Y6aM7QuNJk_gHn_Iugnv_8_hiEwWZKEeWjvE/edit" target="_blank" rel="noopener">可行性評估</a></li>
+    <li><a href="https://docs.google.com/document/d/18ae17TmGg-kpe6SwXLJIFaF7IIccy0ES4EWayYnCd7s/edit" target="_blank" rel="noopener">提案書（給學校）</a></li>
+    <li><a href="https://docs.google.com/spreadsheets/d/1z6bIEBRQc8yD0dPoYbuTeOKUKgQKYJ0mAMpMDNtwfiQ/edit" target="_blank" rel="noopener">預算與經費來源</a></li>
+    <li><a href="https://docs.google.com/document/d/1Gu6C26bdkIY5DB0AvNO8VpOqtXc--R4ax8qdPuSoDi8/edit" target="_blank" rel="noopener">比賽章程草案</a></li>
+    <li><a href="https://docs.google.com/document/d/1o16xlAfZ_eBqekH2PePaagZDz1rndwY2Z3on5VzlEVM/edit" target="_blank" rel="noopener">工作人員名單與班表</a></li>
+    <li><a href="https://docs.google.com/document/d/14AGM09j-NyQa6muXElzNjrmpljyDc2aPGCmsxSdAeS8/edit" target="_blank" rel="noopener">現場檢查清單</a></li>
+    <li><a href="https://docs.google.com/document/d/1cKHas4sKhO6XU3X7yawTtbiAWEDxsbkyPMgUgKq7Pow/edit" target="_blank" rel="noopener">舞台詢價單</a></li>
+    <li><a href="https://docs.google.com/spreadsheets/d/1U-IB7LMhWdUErZ_NL7BHH4BATWnTdfmg4HYzKgx4oqQ/edit" target="_blank" rel="noopener">補助與贊助申請時程</a></li>
+    <li><a href="https://docs.google.com/document/d/1ImuWTuFZQD2Pd02DM0RunjsK5z8Yf7NJWIXjh5PULv8/edit" target="_blank" rel="noopener">問題清單與待決事項</a></li>
+  </ul>
+</section>
+</div>
+
+<script>
+(function(){
+  var G={
+    total:{name:"總召、副召",c:"var(--g-total)",people:"2 人",
+      job:["做最後決定、當學校的窗口","每週開進度會議、看活動總表","天氣不好時決定要不要改室內"],
+      tasks:[["11/13","查行事曆，確定日期"],["11/20","幹部會議：選方案、決定社費撥多少"],["02/26","經費停損點：錢不夠就照順序刪減"],["04/12–23","工作人員說明會、志工訓練"],["04/26–28","看天氣：T-72 預判、T-24 決定"],["05/21","結案、交接"]]},
+    b2b:{name:"廠商對接 B2B",c:"var(--g-b2b)",people:"2 人",
+      job:["舞台、音控（PALT）、器材租借","找贊助、招攤販","邀請 3 位評審"],
+      tasks:[["11/13","打電話問新北市青年局補助時程"],["12/04","PALT 回覆能不能幫忙"],["12/18","舞台至少 2 家書面報價"],["01/29","3 位評審簽同意書"],["03/12","贊助談定；舞台、音響簽約"],["04/16","市集配置圖給攤販"]]},
+    race:{name:"賽事運行",c:"var(--g-race)",people:"2 人（建議加到 4 人）",
+      job:["寫章程、做報名表","海選、核分、通知選手","決賽當天：報到、計時、核分、頒獎"],
+      tasks:[["12/04","章程初稿"],["01/22","章程定稿（老師確認）"],["02/22–03/19","開放報名"],["04/02","線上海選評分完成"],["04/09","公告晉級名單"],["04/19–23","選手說明會、抽出場順序、核分演練"]]},
+    b2c:{name:"行銷公關 B2C",c:"var(--g-b2c)",people:"4 人",
+      job:["海報、社群、網站","到別的學校宣傳比賽","招募志工、找觀眾"],
+      tasks:[["01/29","視覺與宣傳素材"],["02/05","比賽網站上線"],["02/15–03/19","跨校宣傳"],["03/26","志工招募完成"],["04/29–30","當天攝影、限時動態"],["05/14","成果貼文"]]},
+    admin:{name:"事務行政",c:"var(--g-admin)",people:"2 人",
+      job:["公文、借場地、保險","經費申請與核銷","器材借用、野餐墊借還"],
+      tasks:[["11/20","書面問課外組：場地費會不會收"],["12/11","場地預約送出"],["01/08","學校社團經費補助送件"],["04/09","學務系統活動申請（至少前 5 天）"],["04/16","保險投保"],["05/21","核銷完成"]]}
+  };
+  var M=[ // [月份序 0=11月, 日比例, 組, 標題, 說明]
+    [0,13/30,"total","日期定案","查到行事曆，確定不撞期中考。"],
+    [0,20/30,"total","方案定案","幹部會議選方案、決定社費。"],
+    [1,18/31,"b2b","場地與報價","場地申請送出、舞台 2 家報價、PALT 回覆。"],
+    [2,29/31,"race","比賽準備完成","章程定稿、3 位評審確認、網站預告。"],
+    [3,5/28,"b2c","網站上線","比賽網站與宣傳素材完成，準備開放報名。"],
+    [3,15/28,"b2c","跨校宣傳開始","到各校吉他社、熱音社、課外組宣傳。"],
+    [3,22/28,"race","開放報名","網站和報名表上線，跨校宣傳開始。"],
+    [3,26/28,"total","經費停損點","已確認＋申請中的錢不夠，就照順序刪減。"],
+    [4,12/31,"b2b","簽約","舞台、音響合約要有延期與取消條款。"],
+    [4,19/31,"race","報名截止","有效報名 15 組以上；不夠就延一週。"],
+    [5,9/30,"race","公告晉級","兩人核分一致，公告晉級＋備取。"],
+    [5,23/30,"admin","活動前檢查","保險、活動申請、班表、志工訓練都完成。"],
+    [5,29.5/30,"total","活動兩天","4/29 音樂祭＋市集、4/30 比賽決賽。"],
+    [6,21/31,"admin","結案","核銷、成果報告、器材歸還。"]
+  ];
+  var months=["11月","12月","1月","2月","3月","4月","5月"];
+  var neck=document.getElementById("neck"), tip=document.getElementById("tip");
+  var lanes={total:.18,b2b:.34,race:.5,b2c:.66,admin:.82};
+  [.18,.34,.5,.66,.82].forEach(function(y){var s=document.createElement("div");s.className="str";s.style.top=(y*100)+"%";neck.appendChild(s);});
+  months.forEach(function(m,i){var f=document.createElement("div");f.className="fret";f.style.left=(i/7*100)+"%";f.innerHTML="<span>"+m+"</span>";neck.appendChild(f);});
+  // 今天
+  var now=new Date(), start=new Date(2026,10,1), end=new Date(2027,5,1);
+  if(now>=start&&now<end){var t=document.createElement("div");t.className="today";t.style.left=((now-start)/(end-start)*100)+"%";t.innerHTML="<span>今天</span>";neck.appendChild(t);}
+  M.forEach(function(m){
+    var d=document.createElement("button");d.className="dot";d.type="button";
+    d.style.left=((m[0]+m[1])/7*100)+"%";d.style.top=(lanes[m[2]]*100)+"%";d.style.background=G[m[2]].c;
+    d.setAttribute("aria-label",months[m[0]]+"："+m[3]);
+    var show=function(){tip.innerHTML="<b>"+months[m[0]]+"｜"+m[3]+"</b>（"+G[m[2]].name+"）："+m[4];};
+    d.addEventListener("mouseenter",show);d.addEventListener("focus",show);d.addEventListener("click",show);
+    neck.appendChild(d);
+  });
+  var lg=document.getElementById("legend");
+  Object.keys(G).forEach(function(k){lg.insertAdjacentHTML("beforeend","<span><i style='background:"+G[k].c+"'></i>"+G[k].name+"</span>");});
+  // 組別
+  var picker=document.getElementById("picker"), box=document.getElementById("group"), current="race";
+  function render(){
+    var g=G[current];
+    picker.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.k===current?"true":"false");});
+    box.innerHTML="<div class='group' style='--c:"+g.c+"'><div><p class='label' style='color:"+g.c+"'>"+g.people+"</p><h3>"+g.name+"負責什麼</h3><ul>"+
+      g.job.map(function(j){return "<li>"+j+"</li>";}).join("")+"</ul><p class='muted' style='margin-top:10px'>詳細工作看活動總表，篩選「組別」就只會看到你這組。</p></div>"+
+      "<div><h3>你們的重要截止日</h3><ul class='tasks'>"+g.tasks.map(function(t){return "<li><span class='d'>"+t[0]+"</span><span>"+t[1]+"</span></li>";}).join("")+"</ul></div></div>";
+    try{localStorage.setItem("staff-group",current);}catch(e){}
+  }
+  Object.keys(G).forEach(function(k){
+    var b=document.createElement("button");b.type="button";b.dataset.k=k;b.textContent=G[k].name;b.style.setProperty("--c",G[k].c);
+    b.addEventListener("click",function(){current=k;render();});picker.appendChild(b);
+  });
+  try{var s=localStorage.getItem("staff-group");if(s&&G[s])current=s;}catch(e){}
+  render();
+})();
+</script>
+</body></html>
