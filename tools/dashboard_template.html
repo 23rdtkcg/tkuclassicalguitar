@@ -1,0 +1,435 @@
+<title>本活動專案中控台</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: 上方標題列＋倒數；黏性分頁列；每個分頁是一個視圖（總覽卡片、甘特、清單、關卡、決策、人員、經費、上手） */
+:root{
+  --bg:#eef0f3; --surface:#ffffff; --surface2:#f6f7f9; --ink:#14181f; --muted:#5c6573; --line:#dde1e7;
+  --accent:#1d6b57; --accent-soft:#dcefe8; --warn:#b4590f; --warn-soft:#fbeadb; --danger:#c2362f; --danger-soft:#fbe3e1; --ok:#2f7d3e; --ok-soft:#e1f1e3;
+  --g-total:#7e64b8; --g-b2b:#d9822b; --g-race:#3f87c4; --g-b2c:#4f9a4a; --g-admin:#c9a227;
+  --display:"LXGW WenKai TC","Noto Serif TC",serif; --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --radius:14px; --shadow:0 1px 2px rgba(20,24,31,.06),0 6px 20px rgba(20,24,31,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1216; --surface:#171b21; --surface2:#1d222a; --ink:#e8ebef; --muted:#98a1ad; --line:#2a3039;
+  --accent:#4fbf9a; --accent-soft:#17332b; --warn:#e39a4a; --warn-soft:#3a2816; --danger:#ef6b61; --danger-soft:#3b1d1b; --ok:#6cc27a; --ok-soft:#1b3320;
+  --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1216; --surface:#171b21; --surface2:#1d222a; --ink:#e8ebef; --muted:#98a1ad; --line:#2a3039;
+  --accent:#4fbf9a; --accent-soft:#17332b; --warn:#e39a4a; --warn-soft:#3a2816; --danger:#ef6b61; --danger-soft:#3b1d1b; --ok:#6cc27a; --ok-soft:#1b3320;
+  --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;margin:0}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.25;margin:0}
+h1{font-size:clamp(26px,4.4vw,40px)} h2{font-size:22px} h3{font-size:17px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:13px}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+/* header */
+header.top{padding-block:22px 14px}
+.toprow{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--accent);font-weight:700}
+.count{display:flex;align-items:baseline;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 16px;box-shadow:var(--shadow)}
+.count b{font-family:var(--mono);font-size:26px;color:var(--accent)}
+.snap{font-size:12px;color:var(--muted);margin-top:6px}
+/* nav */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabrow{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.tabrow::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab .n{font-family:var(--mono);font-size:11px;margin-left:5px;opacity:.75}
+main{padding-block:20px 60px}
+.view{display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.kpi .v{font-family:var(--mono);font-size:clamp(20px,4.6vw,30px);overflow-wrap:anywhere;font-weight:600;line-height:1.1;margin-top:6px}
+.kpi .l{font-size:13px;color:var(--muted)}
+.kpi.alert{border-color:var(--danger);background:var(--danger-soft)}
+.kpi.alert .v{color:var(--danger)}
+.kpi.warnc{border-color:var(--warn);background:var(--warn-soft)}
+.kpi.warnc .v{color:var(--warn)}
+.sectionhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+/* progress */
+.bar{height:10px;border-radius:99px;background:var(--surface2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0}
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.s-todo{background:var(--surface2);color:var(--muted);border-color:var(--line)}
+.s-doing{background:var(--accent-soft);color:var(--accent)}
+.s-done{background:var(--ok-soft);color:var(--ok)}
+.s-blocked{background:var(--danger-soft);color:var(--danger)}
+.s-late{background:var(--danger-soft);color:var(--danger)}
+.s-now{background:var(--warn-soft);color:var(--warn)}
+.s-missing{background:transparent;color:var(--warn);border:1px dashed var(--warn)}
+.gtag{display:inline-flex;align-items:center;font-size:12px;color:var(--muted);white-space:nowrap}
+.gtag::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--gc);margin-right:6px}
+/* list rows */
+.rows{display:grid}
+.row{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:11px 2px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .code{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:2px}
+.row .t{font-weight:500}
+.row .meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px;color:var(--muted);margin-top:3px}
+.row .side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+.row.missing .t{color:var(--muted)}
+.empty{padding:18px;text-align:center;color:var(--muted)}
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--surface2);padding:3px;border-radius:999px;border:1px solid var(--line)}
+.seg button{border:0;background:transparent;padding:5px 12px;border-radius:999px;cursor:pointer;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+select,input[type=search]{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-width:0}
+input[type=search]{flex:1 1 200px}
+/* banner */
+.banner{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--warn);background:var(--warn-soft);border-radius:var(--radius);padding:14px 16px}
+.banner b{color:var(--warn)}
+/* gantt */
+.gscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.gantt{min-width:980px;position:relative;font-size:13px}
+.gh,.gr{display:grid;grid-template-columns:230px 1fr;border-top:1px solid var(--line)}
+.gh{border-top:0;position:sticky;top:0;background:var(--surface2);z-index:2}
+.gl{padding:7px 10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-right:1px solid var(--line)}
+.gl .code{font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:6px}
+.gt{position:relative;min-height:32px}
+.months{display:flex;height:100%}
+.months span{flex:1 0 0;padding:7px 6px;border-left:1px solid var(--line);font-weight:600;color:var(--muted)}
+.ggroup{background:var(--surface2);font-weight:700}
+.gbar{position:absolute;top:8px;height:16px;border-radius:5px;background:var(--gc);opacity:.9}
+.gbar.missing{background:repeating-linear-gradient(135deg,var(--gc) 0 5px,transparent 5px 9px);border:1px solid var(--gc);opacity:.7}
+.gbar.done{opacity:.35}
+.gbar.blocked{outline:2px solid var(--danger)}
+.gtoday{position:absolute;top:0;bottom:0;width:2px;background:var(--danger);z-index:1;pointer-events:none}
+.gtoday span{position:absolute;top:2px;left:4px;font-size:11px;color:var(--danger);font-weight:700;white-space:nowrap}
+.gms{position:absolute;top:9px;width:13px;height:13px;transform:translateX(-50%) rotate(45deg);background:var(--ink);border-radius:2px}
+.gevent{position:absolute;top:0;bottom:0;background:var(--accent-soft);opacity:.8}
+.vline{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+/* milestones */
+.msl{display:grid;gap:0;position:relative}
+.ms{display:grid;grid-template-columns:96px 22px minmax(0,1fr);gap:12px;padding-bottom:18px}
+.ms .date{font-family:var(--mono);font-size:13px;text-align:right;padding-top:2px}
+.ms .node{position:relative}
+.ms .node::before{content:"";position:absolute;left:10px;top:0;bottom:-18px;width:2px;background:var(--line)}
+.ms:last-child .node::before{display:none}
+.ms .node i{position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--gc)}
+.ms.past .node i{background:var(--gc)}
+.ms.next .node i{box-shadow:0 0 0 5px var(--accent-soft)}
+.ms .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ms.next .box{border-color:var(--accent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13.5px;margin-top:6px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+/* people */
+.team{border-left:5px solid var(--gc)}
+.person{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.person:first-of-type{border-top:0}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;background:var(--gc);flex:none;font-size:14px}
+.person .who{flex:1;min-width:0}
+.person button{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:3px 10px;cursor:pointer;font-size:12px}
+/* budget */
+.bchart{display:grid;gap:14px}
+.bline .lab{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:5px}
+.btrack{position:relative;height:22px;background:var(--surface2);border-radius:6px}
+.btrack i{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
+.btarget{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;border-top:0}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+.tscroll{overflow-x:auto}
+/* onboarding */
+.steps{counter-reset:s;display:grid;gap:12px}
+.step{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.step::before{counter-increment:s;content:counter(s);width:40px;height:40px;border-radius:12px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-weight:600}
+dl.gloss{display:grid;grid-template-columns:minmax(90px,auto) 1fr;gap:8px 14px;margin:0}
+dl.gloss dt{font-weight:700} dl.gloss dd{margin:0;color:var(--muted)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.links a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--surface2)}
+.links a:hover{border-color:var(--accent)}
+.links a small{display:block;color:var(--muted)}
+footer{font-size:12px;color:var(--muted);padding-block:10px 40px}
+@media (max-width:640px){
+  .row{grid-template-columns:62px minmax(0,1fr)} .row .side{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start}
+  .ms{grid-template-columns:70px 22px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:no-preference){.gbar,.card{transition:transform .15s,box-shadow .15s}}
+</style>
+
+<header class="top pad"><div class="wrap">
+  <div class="toprow">
+    <div>
+      <p class="eyebrow">淡江大學共鳴箱古典吉他社｜幹部專用</p>
+      <h1>本活動專案中控台</h1>
+      <p class="snap" id="snap"></p>
+    </div>
+    <div class="count" id="count"></div>
+  </div>
+</div></header>
+<nav class="tabs pad" aria-label="分頁"><div class="wrap"><div class="tabrow" role="tablist" id="tabs"></div></div></nav>
+<main class="pad"><div class="wrap" id="app"></div></main>
+<footer class="pad"><div class="wrap" id="foot"></div></footer>
+
+<script>
+const DATA = /*__DATA__*/null;
+(function(){
+"use strict";
+const GROUPS=[
+  {name:"總召、副召",short:"總召",c:"var(--g-total)"},
+  {name:"廠商對接 B2B",short:"B2B",c:"var(--g-b2b)"},
+  {name:"賽事運行",short:"賽事",c:"var(--g-race)"},
+  {name:"行銷公關 B2C",short:"B2C",c:"var(--g-b2c)"},
+  {name:"事務行政",short:"事務",c:"var(--g-admin)"}];
+const GC=n=>{const g=GROUPS.find(g=>n&&n.indexOf(g.name)===0)||GROUPS.find(g=>n&&n.includes(g.short));return g?g.c:"var(--muted)";};
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const day=s=>{if(!s)return null;const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+const today=(()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());})();
+const DAY=864e5, diff=(a,b)=>Math.round((a-b)/DAY);
+const md=s=>{const d=day(s);return d?`${d.getMonth()+1}/${d.getDate()}`:"—";};
+const money=n=>"NT$"+Math.round(n).toLocaleString("en-US");
+const tasks=DATA.tasks.map(t=>{
+  const s=day(t.start),e=day(t.end);let k;
+  if(t.status==="完成")k="done";else if(t.status==="卡住")k="blocked";
+  else if(e&&e<today)k="late";else if(s&&s<=today)k=t.status==="進行中"?"doing":"now";
+  else k=t.status==="進行中"?"doing":"todo";
+  return Object.assign({},t,{k,s,e});});
+const KLABEL={done:"完成",blocked:"卡住",late:"逾期",now:"該開始了",doing:"進行中",todo:"未開始"};
+const chip=t=>`<span class="chip s-${t.k}">${KLABEL[t.k]}</span>`+(t.missing?` <span class="chip s-missing" title="原規劃有這項工作，但目前活動總表沒有">總表缺漏</span>`:"");
+const gtag=g=>`<span class="gtag" style="--gc:${GC(g)}">${esc(g)}</span>`;
+const evStart=day(DATA.eventStart);
+
+/* ---------- 頂部 ---------- */
+document.getElementById("snap").textContent=`資料快照：${DATA.snapshot}（來源：本活動_活動總表_v2）｜這是唯讀頁面，要改進度請改活動總表`;
+const left=diff(evStart,today);
+document.getElementById("count").innerHTML=left>=0?`<span class="muted small">距活動第一天</span><b>${left}</b><span class="muted small">天｜${md(DATA.eventStart)}（日期待確認）</span>`:`<span class="muted small">活動已結束</span>`;
+document.getElementById("foot").innerHTML=`快照產生於 ${DATA.snapshot}。重新產生：<span class="mono">python3 tools/make_dashboard.py 活動總表.xlsx output/project-dashboard.html</span>。本頁不含電話、Email 等個資。`;
+
+/* ---------- 分頁 ---------- */
+const open=tasks.filter(t=>t.k!=="done");
+const pendDec=DATA.decisions.filter(d=>d.type!=="已確認");
+const VIEWS=[
+  ["overview","總覽"],["timeline","時間軸"],["tasks","全部工作",tasks.length],["milestones","里程碑",DATA.milestones.length],
+  ["decisions","待決事項",pendDec.length],["people","組別與人員"],["budget","經費"],["start","新手上手"]];
+const tabs=document.getElementById("tabs");
+tabs.innerHTML=VIEWS.map(([id,l,n])=>`<button class="tab" role="tab" data-v="${id}">${l}${n!=null?`<span class="n">${n}</span>`:""}</button>`).join("");
+tabs.addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)location.hash=b.dataset.v;});
+const app=document.getElementById("app");
+const state={group:"全部",status:"全部",q:"",owner:""};
+try{const s=JSON.parse(localStorage.getItem("dash-filter")||"{}");Object.assign(state,s);}catch(e){}
+const save=()=>{try{localStorage.setItem("dash-filter",JSON.stringify(state));}catch(e){}};
+
+function route(){
+  let v=(location.hash||"#overview").slice(1);if(!VIEWS.some(x=>x[0]===v))v="overview";
+  tabs.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false"));
+  app.innerHTML=`<section class="view">${R[v]()}</section>`;
+  (A[v]||(()=>{}))();
+  window.scrollTo({top:0});
+}
+window.addEventListener("hashchange",route);
+
+/* ---------- 共用：工作列 ---------- */
+function rowHTML(t){
+  const late=t.k==="late"?`逾期 ${diff(today,t.e)} 天`:(t.e?`剩 ${diff(t.e,today)} 天`:"");
+  return `<div class="row${t.missing?" missing":""}">
+    <div class="code">${esc(t.code)}</div>
+    <div><div class="t">${esc(t.title)}</div>
+      <div class="meta">${gtag(t.group)}<span>👤 ${t.owner?esc(t.owner):'<span style="color:var(--warn)">未指派</span>'}</span><span class="mono">${md(t.start)} → ${md(t.end)}</span>${t.pre?`<span>前置：<span class="mono">${esc(t.pre)}</span></span>`:""}</div>
+      ${t.note?`<div class="meta">${esc(t.note)}</div>`:""}</div>
+    <div class="side">${chip(t)}${t.k!=="done"&&late?`<span class="small muted mono">${late}</span>`:""}</div></div>`;
+}
+
+/* ---------- 視圖 ---------- */
+const R={},A={};
+R.overview=()=>{
+  const done=tasks.filter(t=>t.k==="done").length, late=tasks.filter(t=>t.k==="late"), blocked=tasks.filter(t=>t.k==="blocked");
+  const wk=new Date(+today+7*DAY);
+  const week=tasks.filter(t=>t.k!=="done"&&t.s&&t.s<=wk&&t.e>=today).sort((a,b)=>a.e-b.e);
+  const nextMs=DATA.milestones.find(m=>day(m.date)>=today&&m.status!=="完成");
+  const unassigned=tasks.filter(t=>!t.owner&&t.k!=="done").length;
+  const dec=pendDec.filter(d=>d.due).sort((a,b)=>day(a.due)-day(b.due));
+  const b=DATA.budget, conf=b.income.filter(i=>i.status==="已確認").reduce((s,i)=>s+i.amount,0);
+  const pct=k=>tasks.filter(t=>t.k===k).length/tasks.length*100;
+  return `
+  ${DATA.missingCount?`<div class="banner"><div><b>資料提醒：</b>活動總表目前只有 ${DATA.sheetCount} 項工作，原規劃的另外 ${DATA.missingCount} 項（總召、賽事、B2C 全部，以及部分 B2B、事務）不在總表裡。本頁先用虛線標出「總表缺漏」，請總召確認後補回活動總表。</div></div>`:""}
+  <div class="grid g4">
+    <div class="card kpi"><div class="l">工作完成</div><div class="v">${done}<span class="muted" style="font-size:18px">／${tasks.length}</span></div><div class="bar" style="margin-top:10px">
+      <i style="width:${pct("done")}%;background:var(--ok)"></i><i style="width:${pct("doing")+pct("now")}%;background:var(--accent)"></i><i style="width:${pct("late")+pct("blocked")}%;background:var(--danger)"></i></div></div>
+    <div class="card kpi ${late.length?"alert":""}"><div class="l">逾期未完成</div><div class="v">${late.length}</div><div class="small muted">截止日已過、狀態不是完成</div></div>
+    <div class="card kpi ${blocked.length?"alert":""}"><div class="l">卡住</div><div class="v">${blocked.length}</div><div class="small muted">需要總召協助</div></div>
+    <div class="card kpi ${unassigned?"warnc":""}"><div class="l">還沒指派負責人</div><div class="v">${unassigned}</div><div class="small muted">含總表缺漏的工作</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><div class="sectionhead"><h2>這 7 天要動的工作</h2><a href="#tasks">看全部 →</a></div>
+      <div class="rows">${week.length?week.map(rowHTML).join(""):'<div class="empty">這週沒有排定的工作</div>'}</div></div>
+    <div class="grid" style="align-content:start">
+      ${nextMs?`<div class="card" style="border-color:var(--accent)"><p class="eyebrow">下一個關卡</p><h2 style="margin-top:4px">${esc(nextMs.title)}</h2>
+        <p class="mono" style="margin:4px 0">${md(nextMs.date)}｜還有 ${diff(day(nextMs.date),today)} 天</p>
+        <dl class="kv"><dt>通過條件</dt><dd>${esc(nextMs.cond)}</dd><dt>沒過怎麼辦</dt><dd>${esc(nextMs.fallback)}</dd><dt>主責</dt><dd>${esc(nextMs.group)}</dd></dl></div>`:""}
+      <div class="card"><div class="sectionhead"><h3>最近要拍板的事</h3><a href="#decisions">全部 ${pendDec.length} 項 →</a></div>
+        <div class="rows">${dec.slice(0,4).map(d=>`<div class="row" style="grid-template-columns:44px minmax(0,1fr) auto"><div class="code">${esc(d.code)}</div><div><div class="t">${esc(d.q)}</div><div class="meta">建議：${esc(d.rec)}</div></div><div class="side mono small">${md(d.due)}</div></div>`).join("")}</div></div>
+      <div class="card"><div class="sectionhead"><h3>經費</h3><a href="#budget">詳細 →</a></div>
+        <p style="margin:0">建議方案三總支出 <b class="mono">${money(b.total[2])}</b></p>
+        <p style="margin:0">已確認收入 <b class="mono" style="color:${conf?"var(--ok)":"var(--danger)"}">${money(conf)}</b>｜目前缺口 <b class="mono" style="color:var(--danger)">${money(b.gapConfirmed[2])}</b></p>
+        <p class="small muted" style="margin-top:6px">停損點 2/26：已確認＋申請中收入不夠，就照降規順序刪減。</p></div>
+    </div>
+  </div>
+  <div class="card"><div class="sectionhead"><h2>各組進度</h2><span class="legend"><span><i class="dot" style="background:var(--ok)"></i>完成</span><span><i class="dot" style="background:var(--accent)"></i>進行中／該開始</span><span><i class="dot" style="background:var(--danger)"></i>逾期／卡住</span><span><i class="dot" style="background:var(--line)"></i>未開始</span></span></div>
+    <div class="grid" style="gap:12px">${GROUPS.map(g=>{const ts=tasks.filter(t=>t.group===g.name);if(!ts.length)return"";const c=k=>ts.filter(t=>k.includes(t.k)).length/ts.length*100;const miss=ts.filter(t=>t.missing).length;
+      return `<div><div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:5px">${gtag(g.name)}<span class="muted small mono">${ts.filter(t=>t.k==="done").length}/${ts.length}${miss?`｜總表缺漏 ${miss}`:""}</span></div>
+      <div class="bar"><i style="width:${c(["done"])}%;background:var(--ok)"></i><i style="width:${c(["doing","now"])}%;background:var(--accent)"></i><i style="width:${c(["late","blocked"])}%;background:var(--danger)"></i></div></div>`;}).join("")}</div></div>`;
+};
+
+R.timeline=()=>`
+  <div class="sectionhead"><h2>七個月時間軸</h2><span class="legend"><span><i class="dot" style="background:var(--danger)"></i>今天</span><span>◆ 里程碑</span><span>斜線＝總表缺漏</span><span>淡色＝已完成</span></span></div>
+  <div class="filters">${groupSeg()}</div>
+  <div class="gscroll" tabindex="0" aria-label="甘特圖，可左右捲動"><div class="gantt" id="gantt"></div></div>
+  <p class="small muted">色塊是「計畫期間」，不代表已完成。把滑鼠移到色塊上看詳細。</p>`;
+A.timeline=()=>{
+  const start=new Date(2026,10,1),end=new Date(2027,5,1),span=end-start;
+  const x=d=>Math.max(0,Math.min(100,(d-start)/span*100));
+  const months=[];for(let d=new Date(start);d<end;d.setMonth(d.getMonth()+1))months.push(`${d.getMonth()+1}月`);
+  const vlines=months.map((_,i)=>`<div class="vline" style="left:${i/months.length*100}%"></div>`).join("");
+  const tlOn=today>=start&&today<end, tl=tlOn?`<div class="gtoday" style="left:${x(today)}%"></div>`:"", tlLab=tlOn?`<div class="gtoday" style="left:${x(today)}%"><span>今天</span></div>`:"";
+  const ev=`<div class="gevent" style="left:${x(evStart)}%;width:${x(new Date(+day(DATA.eventEnd)+DAY))-x(evStart)}%"></div>`;
+  let h=`<div class="gh"><div class="gl"><b>工作</b></div><div class="gt"><div class="months">${months.map(m=>`<span>${m}</span>`).join("")}</div></div></div>`;
+  h+=`<div class="gr"><div class="gl"><b>里程碑</b></div><div class="gt">${vlines}${ev}${DATA.milestones.map(m=>`<div class="gms" style="left:${x(day(m.date))}%" title="${esc(m.code+" "+m.title+"｜"+md(m.date))}"></div>`).join("")}${tlLab}</div></div>`;
+  GROUPS.filter(g=>state.group==="全部"||state.group===g.name).forEach(g=>{
+    const ts=tasks.filter(t=>t.group===g.name).sort((a,b)=>a.s-b.s);if(!ts.length)return;
+    h+=`<div class="gr ggroup"><div class="gl">${gtag(g.name)}</div><div class="gt" style="min-height:28px">${vlines}${tl}</div></div>`;
+    ts.forEach(t=>{const l=x(t.s),w=Math.max(.6,x(new Date(+t.e+DAY))-l);
+      h+=`<div class="gr"><div class="gl" title="${esc(t.title)}"><span class="code">${esc(t.code)}</span>${esc(t.title)}</div><div class="gt">${vlines}${ev}
+      <div class="gbar ${t.missing?"missing":""} ${t.k==="done"?"done":""} ${t.k==="blocked"||t.k==="late"?"blocked":""}" style="--gc:${g.c};left:${l}%;width:${w}%" title="${esc(`${t.code} ${t.title}｜${md(t.start)}→${md(t.end)}｜${t.owner||"未指派"}｜${KLABEL[t.k]}${t.missing?"｜總表缺漏":""}`)}"></div>${tl}</div></div>`;});
+  });
+  document.getElementById("gantt").innerHTML=h;
+  bindGroupSeg();
+};
+
+function groupSeg(){return `<div class="seg" role="group" aria-label="組別">${["全部",...GROUPS.map(g=>g.name)].map(n=>`<button data-g="${esc(n)}" aria-pressed="${state.group===n}">${n==="全部"?"全部":esc(GROUPS.find(g=>g.name===n).short)}</button>`).join("")}</div>`;}
+function bindGroupSeg(){app.querySelectorAll("[data-g]").forEach(b=>b.addEventListener("click",()=>{state.group=b.dataset.g;save();route();}));}
+
+R.tasks=()=>{
+  const owners=[...new Set(tasks.map(t=>t.owner).filter(Boolean))];
+  return `<div class="sectionhead"><h2>全部工作</h2><span class="muted small" id="tcount"></span></div>
+  <div class="card" style="padding:12px"><div class="filters">
+    ${groupSeg()}
+    <div class="seg" role="group" aria-label="狀態">${["全部","待處理","逾期","卡住","完成","總表缺漏"].map(s=>`<button data-st="${s}" aria-pressed="${state.status===s}">${s}</button>`).join("")}</div>
+    <select id="owner" aria-label="負責人"><option value="">所有負責人</option>${owners.map(o=>`<option ${state.owner===o?"selected":""}>${esc(o)}</option>`).join("")}<option value="__none" ${state.owner==="__none"?"selected":""}>未指派</option></select>
+    <input type="search" id="q" placeholder="搜尋工作、編號、備註…" value="${esc(state.q)}" aria-label="搜尋">
+  </div></div>
+  <div class="card"><div class="rows" id="tlist"></div></div>`;
+};
+A.tasks=()=>{
+  const draw=()=>{
+    const q=state.q.trim().toLowerCase();
+    const list=tasks.filter(t=>(state.group==="全部"||t.group===state.group)
+      &&(state.status==="全部"||(state.status==="待處理"&&t.k!=="done")||(state.status==="逾期"&&t.k==="late")||(state.status==="卡住"&&t.k==="blocked")||(state.status==="完成"&&t.k==="done")||(state.status==="總表缺漏"&&t.missing))
+      &&(!state.owner||(state.owner==="__none"?!t.owner:t.owner===state.owner))
+      &&(!q||(t.code+t.title+t.note+t.owner).toLowerCase().includes(q))).sort((a,b)=>a.e-b.e);
+    document.getElementById("tlist").innerHTML=list.length?list.map(rowHTML).join(""):'<div class="empty">沒有符合條件的工作。試著清除篩選。</div>';
+    document.getElementById("tcount").textContent=`顯示 ${list.length}／${tasks.length} 項，依截止日排序`;
+  };
+  bindGroupSeg();
+  app.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{state.status=b.dataset.st;save();app.querySelectorAll("[data-st]").forEach(x=>x.setAttribute("aria-pressed",x===b));draw();}));
+  document.getElementById("owner").addEventListener("change",e=>{state.owner=e.target.value;save();draw();});
+  document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value;save();draw();});
+  draw();
+};
+
+R.milestones=()=>{
+  const nxt=DATA.milestones.find(m=>day(m.date)>=today&&m.status!=="完成");
+  return `<div class="sectionhead"><h2>13 個關卡</h2><span class="muted small">關卡沒過，就不往下一步走（例如沒評審不開報名、沒錢不簽約）。</span></div>
+  <div class="msl">${DATA.milestones.map(m=>{const d=day(m.date),past=d<today||m.status==="完成";
+    return `<div class="ms ${past?"past":""} ${m===nxt?"next":""}" style="--gc:${GC(m.group)}">
+      <div class="date">${md(m.date)}<div class="small muted">${past?"":`${diff(d,today)} 天後`}</div></div>
+      <div class="node"><i></i></div>
+      <div class="box"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px"><h3><span class="mono muted small">${esc(m.code)}</span> ${esc(m.title)}</h3>
+        <span>${m===nxt?'<span class="chip s-doing">下一關</span> ':""}<span class="chip ${m.status==="完成"?"s-done":m.status==="卡住"?"s-blocked":"s-todo"}">${esc(m.status)}</span></span></div>
+        <dl class="kv"><dt>主責</dt><dd>${gtag(m.group)}</dd><dt>通過條件</dt><dd>${esc(m.cond)}</dd><dt>沒過怎麼辦</dt><dd>${esc(m.fallback)}</dd></dl></div></div>`;}).join("")}</div>`;
+};
+
+R.decisions=()=>{
+  const conf=DATA.decisions.filter(d=>d.type==="已確認"), tbc=DATA.decisions.filter(d=>d.type==="待確認"), pend=DATA.decisions.filter(d=>d.type==="待決").sort((a,b)=>day(a.due)-day(b.due));
+  const card=d=>{const due=day(d.due),dl=due?diff(due,today):null;
+    return `<div class="row" style="grid-template-columns:44px minmax(0,1fr) auto"><div class="code">${esc(d.code)}</div>
+      <div><div class="t">${esc(d.q)}</div><div class="meta"><span>建議：<b style="color:var(--ink)">${esc(d.rec)}</b></span></div>${d.opts?`<div class="meta">選項：${esc(d.opts)}</div>`:""}${d.answer?`<div class="meta" style="color:var(--ok)">決議：${esc(d.answer)}</div>`:""}</div>
+      <div class="side">${due?`<span class="mono small">${md(d.due)}</span><span class="chip ${dl<0?"s-late":dl<=7?"s-now":"s-todo"}">${dl<0?`過期 ${-dl} 天`:`${dl} 天後`}</span>`:""}${d.ms?`<span class="small muted mono">${esc(d.ms)}</span>`:""}</div></div>`;};
+  return `<div class="grid g2" style="align-items:start">
+    <div class="card"><div class="sectionhead"><h2>幹部會議要決定</h2><span class="muted small">${pend.length} 項，依期限排序</span></div><div class="rows">${pend.map(card).join("")}</div></div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><div class="sectionhead"><h3>等學校或外部回覆</h3></div><div class="rows">${tbc.map(card).join("")}</div></div>
+      <div class="card"><div class="sectionhead"><h3>已確認的事</h3></div><div class="rows">${conf.map(card).join("")}</div></div>
+    </div></div>`;
+};
+
+R.people=()=>`<div class="sectionhead"><h2>組別與人員</h2><span class="muted small">按「看工作」直接篩出這個人的工作。</span></div>
+  <div class="grid g3">${GROUPS.map(g=>{const ps=DATA.people.filter(p=>p.group===g.name),ts=tasks.filter(t=>t.group===g.name);
+    return `<div class="card team" style="--gc:${g.c}"><div class="sectionhead"><h3>${esc(g.name)}</h3><span class="small muted mono">${ts.length} 項工作</span></div>
+      ${ps.map(p=>{const n=ts.filter(t=>t.owner===p.name&&t.k!=="done").length+tasks.filter(t=>t.owner===p.name&&t.group!==g.name&&t.k!=="done").length;
+        return `<div class="person"><div class="avatar">${esc(p.name.slice(-2,-1)||p.name[0])}</div><div class="who"><div><b>${esc(p.name)}</b> <span class="small muted">${esc(p.role)}</span></div>${p.note?`<div class="small muted">${esc(p.note)}</div>`:""}</div><button data-owner="${esc(p.name)}">看工作 ${n}</button></div>`;}).join("")||'<p class="muted small">名冊尚未登錄</p>'}
+      ${ts.filter(t=>!t.owner).length?`<p class="small" style="color:var(--warn);margin:8px 0 0">還有 ${ts.filter(t=>!t.owner).length} 項工作未指派個人</p>`:""}</div>`;}).join("")}</div>`;
+A.people=()=>app.querySelectorAll("[data-owner]").forEach(b=>b.addEventListener("click",()=>{Object.assign(state,{owner:b.dataset.owner,group:"全部",status:"全部",q:""});save();location.hash="tasks";}));
+
+R.budget=()=>{
+  const b=DATA.budget,max=Math.max(...b.total)*1.05,conf=b.income.filter(i=>i.status==="已確認").reduce((s,i)=>s+i.amount,0),est=b.income.reduce((s,i)=>s+i.amount,0);
+  const line=(lab,v,color,i)=>`<div class="bline"><div class="lab"><span>${lab}</span><b class="mono">${money(v)}</b></div><div class="btrack"><i style="width:${v/max*100}%;background:${color}"></i><div class="btarget" style="left:${b.target/max*100}%" title="目標 NT$100,000"></div></div></div>`;
+  const sc={"已確認":"s-done","申請中":"s-doing","預估":"s-todo"};
+  return `<div class="grid g4">
+    <div class="card kpi"><div class="l">建議方案總支出</div><div class="v">${money(b.total[2])}</div><div class="small muted">含 10% 預備金</div></div>
+    <div class="card kpi ${conf?"":"alert"}"><div class="l">已確認收入</div><div class="v">${money(conf)}</div><div class="small muted">只有這個是真的錢</div></div>
+    <div class="card kpi"><div class="l">全部預估收入</div><div class="v">${money(est)}</div><div class="small muted">還沒到位，不能當現金</div></div>
+    <div class="card kpi alert"><div class="l">目前缺口（只看已確認）</div><div class="v">${money(b.gapConfirmed[2])}</div><div class="small muted">預估全到位仍缺 ${money(b.gapAll[2])}</div></div></div>
+  <div class="card"><div class="sectionhead"><h2>三個方案比較</h2><span class="legend"><span>｜黑線＝目標 NT$100,000</span></span></div>
+    <div class="bchart">${b.plans.map((p,i)=>line(p+(i===2?"（建議）":""),b.total[i],i===2?"var(--accent)":"var(--muted)",i)).join("")}
+    ${line("方案三精簡執行（獎金贊助、野餐墊用借、樂團自帶鼓組）",b.lean[2],"color-mix(in srgb,var(--accent) 45%,transparent)")}</div>
+    <p class="small muted" style="margin-top:10px">所有單價目前都是純假設或同類參考，實際報價 0 筆。場地若要收費，方案三可能再多約 NT$26,400。</p></div>
+  <div class="card"><div class="sectionhead"><h2>經費來源</h2><span class="legend"><span class="chip s-done">已確認</span><span class="chip s-doing">申請中</span><span class="chip s-todo">預估</span></span></div>
+    <div class="tscroll"><table><thead><tr><th>來源</th><th class="num">金額</th><th>狀態</th><th>說明</th></tr></thead><tbody>
+    ${b.income.map(i=>`<tr><td>${esc(i.name)}</td><td class="num">${money(i.amount)}</td><td><span class="chip ${sc[i.status]||"s-todo"}">${esc(i.status)}</span></td><td class="small muted">${esc(i.note)}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+};
+
+R.start=()=>`<div class="grid g2" style="align-items:start">
+  <div class="card"><h2>第一次接手？照這 5 步</h2><p class="muted small" style="margin:6px 0 14px">先看懂全貌，再找自己的工作。不用一次讀完所有文件。</p>
+    <div class="steps">
+      <div class="step"><div><b>用 2 分鐘看「總覽」</b><div class="muted">知道離活動還有幾天、下一個關卡是什麼、這週要動哪些工作。</div></div></div>
+      <div class="step"><div><b>到「組別與人員」按自己的名字</b><div class="muted">會直接篩出你負責的工作，依截止日排好。</div></div></div>
+      <div class="step"><div><b>看「里程碑」裡你這組的關卡</b><div class="muted">關卡寫了「通過條件」，那就是你這組要交出的成果。</div></div></div>
+      <div class="step"><div><b>每週開會前更新活動總表</b><div class="muted">本頁是快照，進度要改在 Google 試算表「本活動_活動總表_v2」的狀態欄。改完請總召重新產生本頁。</div></div></div>
+      <div class="step"><div><b>卡住就標「卡住」，並告訴總召</b><div class="muted">卡住不丟臉，藏起來才麻煩。不確定的規定或價格寫「待確認」，不要自己猜。</div></div></div>
+    </div></div>
+  <div class="grid" style="align-content:start">
+    <div class="card"><h2>活動一句話</h2><p style="margin-top:8px">兩天的免費校園音樂活動：<b>週四</b>校內音樂社團演出＋小市集（戶外），<b>週五</b>全國大專歌唱比賽決賽（建議室內）。四件事都要做到：校內展演、歌唱比賽＋評審、跨校參賽、市集。</p>
+      <p class="muted small">最高原則：第一次辦，穩定比華麗重要。遇到選擇，選比較省錢、省人力、不容易出錯的那個。</p></div>
+    <div class="card"><h2>名詞小辭典</h2><dl class="gloss" style="margin-top:10px">
+      <dt>B2B</dt><dd>對廠商、贊助商、評審的組（廠商對接組）</dd>
+      <dt>B2C</dt><dd>對觀眾、選手的宣傳組（行銷公關組）</dd>
+      <dt>PALT</dt><dd>校內音控團隊，負責音響</dd>
+      <dt>Backline</dt><dd>樂團上台用的鼓組、音箱</dd>
+      <dt>里程碑</dt><dd>一個要「過關」的日期，沒過就不往下走</dd>
+      <dt>停損點</dt><dd>2/26 檢查錢夠不夠；不夠就照順序刪減，不硬撐</dd>
+      <dt>T-72／T-24</dt><dd>活動前 72／24 小時，看天氣做決定的時間</dd>
+      <dt>總表缺漏</dt><dd>原規劃有、但活動總表目前沒有的工作，要補回</dd></dl></div>
+  </div></div>
+  <div class="card"><h2>重要文件</h2><p class="muted small" style="margin:4px 0 12px">都在 Google 雲端「歌神杯」資料夾。</p><div class="links">
+    ${[["本活動_活動總表_v2","每週更新狀態的地方","https://docs.google.com/spreadsheets/d/1SjKFqZZPYdVReN-dzqO-a4tQp4ng4pgvW5t7gniDx3g/edit"],
+       ["專案背景與決策紀錄 v3","唯一真實來源，先讀這份","https://drive.google.com/file/d/1cgyhsKSl-az67s4LMNgrIA6vFJMtVwBD/view"],
+       ["可行性評估","為什麼選方案三、前 5 大風險","https://docs.google.com/document/d/1pOFKnr5Y6aM7QuNJk_gHn_Iugnv_8_hiEwWZKEeWjvE/edit"],
+       ["預算與經費來源","每一筆錢從哪來、花去哪","https://docs.google.com/spreadsheets/d/1z6bIEBRQc8yD0dPoYbuTeOKUKgQKYJ0mAMpMDNtwfiQ/edit"],
+       ["比賽章程草案","賽事組必讀","https://docs.google.com/document/d/1Gu6C26bdkIY5DB0AvNO8VpOqtXc--R4ax8qdPuSoDi8/edit"],
+       ["問題清單與待決事項","要問課外組的問題","https://docs.google.com/document/d/1ImuWTuFZQD2Pd02DM0RunjsK5z8Yf7NJWIXjh5PULv8/edit"],
+       ["工作人員名單與班表","活動當天誰在哪","https://docs.google.com/document/d/1o16xlAfZ_eBqekH2PePaagZDz1rndwY2Z3on5VzlEVM/edit"],
+       ["補助與贊助申請時程","B2B 必讀","https://docs.google.com/spreadsheets/d/1U-IB7LMhWdUErZ_NL7BHH4BATWnTdfmg4HYzKgx4oqQ/edit"]]
+      .map(([t,d,u])=>`<a href="${u}" target="_blank" rel="noopener">${t}<small>${d}</small></a>`).join("")}</div></div>`;
+
+route();
+})();
+</script>
