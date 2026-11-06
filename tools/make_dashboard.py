@@ -96,6 +96,8 @@ data = dict(snapshot=datetime.date.today().isoformat(), eventStart='2027-04-29',
             sheetCount=len([t for t in tasks if not t['missing']]),
             missingCount=len([t for t in tasks if t['missing']]))
 tpl = (ROOT / 'dashboard_template.html').read_text()
-pathlib.Path(out).write_text(tpl.replace('/*__DATA__*/null', json.dumps(data, ensure_ascii=False)))
+icons = json.loads((ROOT / 'icons-solar.json').read_text())  # Solar Icons（480 Design，CC BY 4.0）
+html = tpl.replace('/*__DATA__*/null', json.dumps(data, ensure_ascii=False)).replace('/*__ICONS__*/{}', json.dumps(icons, ensure_ascii=False))
+pathlib.Path(out).write_text(html)
 print('tasks', len(tasks), 'in sheet', data['sheetCount'], 'missing', data['missingCount'],
       'milestones', len(ms), 'decisions', len(dec), 'people', len(people), 'income', len(income))
