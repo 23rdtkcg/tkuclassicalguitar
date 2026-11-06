@@ -11,6 +11,7 @@ window.SITE = {
   organizer: "淡江大學共鳴箱古典吉他社",
   dates: "2027/04/29（四）音樂祭　2027/04/30（五）歌唱比賽決賽",
   dateNote: "日期待學校行事曆確認，正式日期以本網站公告為準。",
+  finalDate: "2027-04-30",       // 決賽日期（YYYY-MM-DD），首頁倒數用；確定後改這裡
   contactEmail: "",              // 例如 tkcg.event@gmail.com（待決）
   instagram: "",                 // 例如 https://www.instagram.com/xxx
 

@@ -2,60 +2,80 @@
 <html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>本活動｜大專歌唱比賽</title>
 <meta name="description" content="淡江大學共鳴箱古典吉他社主辦：校園音樂祭與全國大專歌唱比賽。免費報名、免費入場。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap">
+<link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<a class="skip" href="#main">跳到主要內容</a>
-<header class="hero">
-  <nav class="nav" aria-label="主選單">
-    <span class="brand" data-bind="name">本活動</span>
-    <ul>
-      <li><a href="#about">介紹</a></li>
-      <li><a href="#timeline">時程</a></li>
-      <li><a href="#rules">章程</a></li>
-      <li><a href="#register">報名</a></li>
-      <li><a href="#results">公告</a></li>
-      <li><a href="#faq">FAQ</a></li>
-    </ul>
-  </nav>
-  <div class="hero-inner">
-    <p class="eyebrow" data-bind="organizer">淡江大學共鳴箱古典吉他社</p>
-    <h1><span data-bind="name">本活動</span><small data-bind="subtitle"></small></h1>
-    <p class="lead">一天校園音樂祭，一天全國大專歌唱比賽。<br>報名免費，入場免費。</p>
-    <p class="dates" data-bind="dates"></p>
-    <p class="note" data-bind="dateNote"></p>
-    <a class="btn" href="#register">我要報名</a>
+<body data-spread="yellow">
+<a class="mz-skip" href="#main">跳到主要內容</a>
+
+<header class="mz-mast"><div class="mz-wrap">
+  <a class="mz-logo" href="#top"><b data-bind="name">本活動</b><span data-bind="organizer">淡江大學共鳴箱古典吉他社</span></a>
+  <span class="mz-issue">全國大專歌唱比賽</span>
+  <div class="mz-mast-right">
+    <span class="mz-count" id="mast-count" hidden></span>
+    <a class="mz-mbtn" href="#register">報名</a>
   </div>
-</header>
+</div></header>
+
+<nav class="mz-nav" aria-label="主選單"><div class="mz-wrap"><ul id="nav">
+  <li><a href="#about"><span class="mz-key">01</span>介紹</a></li>
+  <li><a href="#timeline"><span class="mz-key">02</span>時程</a></li>
+  <li><a href="#rules"><span class="mz-key">03</span>章程</a></li>
+  <li><a href="#register"><span class="mz-key">04</span>報名</a></li>
+  <li><a href="#results"><span class="mz-key">05</span>公告</a></li>
+  <li><a href="#faq"><span class="mz-key">06</span>FAQ</a></li>
+</ul></div></nav>
 
 <main id="main">
-  <section id="about" class="wrap">
-    <h2>活動介紹</h2>
-    <div class="cards">
-      <article class="card">
-        <p class="tag">Day 1｜週四</p>
+  <section class="mz-cover mz-dots" id="top" aria-labelledby="cover-h"><div class="mz-wrap">
+    <div class="mz-cover-hed">
+      <span class="mz-giant mz-register" id="cover-num" aria-hidden="true" hidden></span>
+      <h1 id="cover-h"><span class="mz-sr" id="cover-sr"></span><span id="cover-label">天後決賽</span><span class="mz-dek"><span data-bind="name">本活動</span>｜<span data-bind="subtitle"></span></span></h1>
+    </div>
+    <div class="mz-coverlines">
+      <a class="mz-coverline" href="#about"><small>Day 1｜週四</small><b>校園音樂祭＋市集</b></a>
+      <a class="mz-coverline" href="#about"><small>Day 2｜週五</small><b>全國大專歌唱比賽決賽</b></a>
+      <a class="mz-coverline" href="#register"><small>報名免費，入場免費</small><b>主唱是大專在學生就能報名</b></a>
+    </div>
+    <div class="cover-side">
+      <p class="cover-dates" data-bind="dates"></p>
+      <p class="mz-caption" data-bind="dateNote"></p>
+      <p><a class="mz-btn is-ink is-big" href="#register">我要報名</a></p>
+    </div>
+  </div></section>
+
+  <div class="mz-wrap"><div class="mz-view">
+
+  <section id="about" class="mz-panel mz-reveal" aria-labelledby="h-about">
+    <div class="mz-panel-h"><h2 id="h-about">活動介紹</h2><p class="mz-sub">兩天，兩種舞台</p></div>
+    <div class="mz-grid days">
+      <article class="mz-card">
+        <span class="mz-kicker">Day 1｜週四</span>
         <h3>校園音樂祭＋市集</h3>
         <p>淡江校內音樂性社團輪番上台，可以是完整樂團。旁邊有小市集，觀眾坐在草地上聽。</p>
       </article>
-      <article class="card">
-        <p class="tag">Day 2｜週五</p>
+      <article class="mz-card is-signal">
+        <span class="mz-kicker">Day 2｜週五</span>
         <h3>大專歌唱比賽決賽</h3>
         <p>全國大專校院學生都能報名。線上影音海選後，10～12 組進決賽，評出前三名，觀眾投票選人氣獎。</p>
       </article>
     </div>
   </section>
 
-  <section id="timeline" class="wrap">
-    <h2>比賽時程</h2>
-    <ol class="timeline" id="timeline-list"></ol>
+  <section id="timeline" class="mz-panel mz-reveal" aria-labelledby="h-tl">
+    <div class="mz-panel-h"><h2 id="h-tl">比賽時程</h2><p class="mz-sub">日期以本網站最新公告為準</p></div>
+    <ol class="mz-dates" id="timeline-list"></ol>
   </section>
 
-  <section id="rules" class="wrap">
-    <h2>比賽章程重點</h2>
-    <dl class="facts">
+  <section id="rules" class="mz-panel mz-reveal" aria-labelledby="h-rules">
+    <div class="mz-panel-h"><h2 id="h-rules">比賽章程重點</h2></div>
+    <dl class="mz-facts">
       <div><dt>組別</dt><dd>只有一組：歌唱組</dd></div>
       <div><dt>資格</dt><dd>全國大專校院在學學生（主唱）</dd></div>
       <div><dt>海選</dt><dd>YouTube 不公開影片 1～2 分鐘，一鏡到底、不修音</dd></div>
@@ -70,22 +90,24 @@
     <p id="rules-link" class="muted">完整章程整理中，公告後放在這裡。</p>
   </section>
 
-  <section id="register" class="wrap">
-    <h2>報名</h2>
-    <p>報名期間：<strong data-bind="registrationPeriod"></strong></p>
+  <section id="register" class="mz-invert mz-reveal" aria-labelledby="h-reg">
+    <span class="mz-kicker">報名</span>
+    <h2 id="h-reg" class="reg-h">報名期間</h2>
+    <p class="reg-period"><strong data-bind="registrationPeriod"></strong></p>
     <div id="form-area" class="form-area"></div>
   </section>
 
-  <section id="results" class="wrap">
-    <h2>晉級與得獎公告</h2>
-    <h3>決賽晉級名單</h3>
+  <section id="results" class="mz-panel mz-reveal" aria-labelledby="h-res">
+    <div class="mz-panel-h"><h2 id="h-res">晉級與得獎公告</h2></div>
+    <h3 class="sub-h">決賽晉級名單</h3>
     <div id="finalists"></div>
-    <h3>得獎名單</h3>
+    <h3 class="sub-h">得獎名單</h3>
     <div id="winners"></div>
   </section>
 
-  <section id="faq" class="wrap">
-    <h2>常見問題</h2>
+  <section id="faq" class="mz-reveal" aria-labelledby="h-faq">
+    <div class="mz-lead"><h2 id="h-faq">常見問題</h2><p>找不到答案就寫信問我們。</p></div>
+    <div class="mz-faq">
     <details><summary>要收報名費嗎？觀眾要買票嗎？</summary><p>都不用。報名、入場、攤位全部免費。</p></details>
     <details><summary>我不是淡江的學生，可以報名嗎？</summary><p>可以。只要主唱是全國大專校院的在學學生就能報名。</p></details>
     <details><summary>伴奏的人也要是學生嗎？</summary><p>章程確認中，公告後會更新在這裡。</p></details>
@@ -95,15 +117,19 @@
     <details><summary>比賽會直播嗎？我的影片會被放上網嗎？</summary><p>第一年不直播。主辦方會錄影存檔，但不會公開上傳完整的翻唱演出影片，只會用 30 秒以內的片段或照片做活動紀錄。</p></details>
     <details><summary>下雨怎麼辦？</summary><p>決賽在室內舉行（地點待確認）。如果遇到颱風停課等狀況，會在活動前 24 小時在本網站公告並寄 Email。</p></details>
     <details><summary>我的個人資料會怎麼使用？</summary><p>只用在比賽聯絡、審查、頒獎和核銷，最晚 2027/05/31 刪除。公告名單只會放姓名、學校、曲目。</p></details>
+    </div>
   </section>
+
+  </div></div>
 </main>
 
-<footer class="foot">
-  <p>主辦：<span data-bind="organizer"></span></p>
-  <p id="contact"></p>
-  <p class="muted">本網站為靜態網站；報名資料由 Google 表單保存。</p>
-</footer>
+<footer class="mz-foot"><div class="mz-wrap">
+  <span>主辦：<span data-bind="organizer"></span></span>
+  <span id="contact"></span>
+  <span>本網站為靜態網站；報名資料由 Google 表單保存。</span>
+</div></footer>
 <script src="content.js"></script>
 <script src="app.js"></script>
+<script src="magazine.js"></script>
 </body>
 </html>
