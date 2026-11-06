@@ -213,7 +213,7 @@ a.mz-stat:hover{background:var(--mz-black);color:var(--mz-yellow)}
 .mz-seg button:last-child{border-right:0}
 .mz-seg button:hover{background:var(--mz-yellow);color:var(--mz-black)}
 .mz-seg button[aria-pressed="true"]{background:var(--mz-ink);color:var(--mz-paper)}
-@media (pointer:coarse){.mz-seg button,.mz-link,.mz-mbtn{min-height:44px}.mz-mbtn{min-width:44px}}
+@media (pointer:coarse){.mz-seg button,.mz-link,.mz-mbtn{min-height:44px}.mz-mbtn,.mz-themes button{min-width:44px;min-height:44px}}
 
 /* ========== 10. 表單 ========== */
 .mz-field{display:grid;gap:6px}
